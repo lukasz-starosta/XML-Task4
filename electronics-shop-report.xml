@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<?xml-stylesheet type="text/xsl" href="xml-to-xhtml.xsl"?>
+<?xml-stylesheet type="text/xsl" href="xml-to-svg.xsl"?>
 <electronics-shop>
     <products-list>
         <product product-id="i50" category="Notebook" manufacturer="Acer">
@@ -507,12 +507,12 @@
                 Łukasz
                 Starosta
                 217862
-        </author>
+            </author>
             <author>
                 Piotr
                 Karczewski
                 217846
-        </author>
+            </author>
         </authors>
         <date-of-the-report>Saturday, the 15th of December, 2018</date-of-the-report>
     </document-information>
