@@ -167,6 +167,9 @@
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
                         <xsl:text>Product by category contribution to total (hover over legend circles)</xsl:text>
                     </text>
+
+                    <circle id="circleRotateStart" cx="0" cy="10" r="8" fill="lightgreen" cursor="pointer"/>
+                    <circle id="circleRotateEnd" cx="18" cy="10" r="8" fill="lightcoral" cursor="pointer"/>
                     <xsl:call-template name="draw-donut-chart-category">
                         <xsl:with-param name="i">1</xsl:with-param>
                         <xsl:with-param name="count">
@@ -440,7 +443,7 @@
             <!-- Radius - 100 / 2pi -->
             <svg viewBox="0 0 42 42" width="350" height="350">
                 <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}">
-                    <animateTransform attributeName="transform" begin="0s" dur="60s" type="rotate" from="0 21 21" to="360 21 21" repeatCount="indefinite" />
+                    <animateTransform attributeName="transform" begin="circleRotateStart.click" end="circleRotateEnd.click" dur="60s" type="rotate" from="0 21 21" to="360 21 21" repeatCount="indefinite" />
                 </circle>
             </svg>
             <circle id="{/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name}" fill="{$color}" stroke="black" stroke-width="0.1" cx="400" cy="{40 * $i}" r="10"/>
