@@ -40,7 +40,7 @@
 
                     <!-- Graph title -->
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
-                        <xsl:text>Number of products by manufacturer. Total number of products:</xsl:text>
+                        <xsl:text>Number of products by manufacturer. Total number of products: </xsl:text>
                         <xsl:value-of select="/electronics-shop/summary/total-number-of-different-products"/>
                     </text>
 
@@ -57,6 +57,7 @@
                         <text x="{65 * position()}" y="338" style="text-anchor: middle; font-family: sans-serif; font-size: 0.9em;">
                             <xsl:value-of select="./@manufacturer-name" />
                         </text>
+
                     </xsl:for-each>
 
                     <!-- Variable for the max number of products -->
@@ -70,16 +71,19 @@
                     </xsl:variable>
 
                     <!-- Y axis text -->
-                    <xsl:call-template name="for-loop">
+                    <xsl:call-template name="draw-lines-and-text">
                         <xsl:with-param name="i">1</xsl:with-param>
                         <xsl:with-param name="count">
                             <xsl:value-of select="$max" />
+                        </xsl:with-param>
+                        <xsl:with-param name="template-variant">
+                            <xsl:value-of select="name(/electronics-shop/summary/number-of-products-by-manufacturer)" />
                         </xsl:with-param>
                     </xsl:call-template>
                 </g>
 
                 <g id="rect-graph-product-by-category">
-                    <use href="#rect-graph-base" x="52vw" y="2vh" />
+                    <use href="#rect-graph-base" />
                 </g>
                 <g id="pie-chart-manufacturer-contribution">
                     <use href="#pie-chart-base" x="2vw" y="52vh" />
@@ -97,33 +101,43 @@
         </svg>
     </xsl:template>
 
-    <!-- For loop -->
-    <xsl:template name="for-loop">
+    <!-- For loop drawing graph lines-->
+    <xsl:template name="draw-lines-and-text">
         <xsl:param name="i" />
         <xsl:param name="count" />
+        <xsl:param name="template-variant" />
 
         <!-- If i < count> -->
         <xsl:if test="$i &lt;= $count">
-            <xsl:call-template name="draw-products-by-manufacturer-lines-and-vtext">
-                <xsl:with-param name="i">
-                    <xsl:value-of select="$i"/>
-                </xsl:with-param>
-            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="$template-variant = name(/electronics-shop/summary/number-of-products-by-manufacturer)">
+                    <xsl:call-template name="draw-products-by-manufacturer-lines-and-vtext">
+                        <xsl:with-param name="i">
+                            <xsl:value-of select="$i"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:when>
+                <!-- Additional options go here -->
+            </xsl:choose>
         </xsl:if>
 
         <!-- The actual looping -->
         <xsl:if test="$i &lt;= $count">
-            <xsl:call-template name="for-loop">
+            <xsl:call-template name="draw-lines-and-text">
                 <xsl:with-param name="i">
                     <xsl:value-of select="$i + 1"/>
                 </xsl:with-param>
                 <xsl:with-param name="count">
                     <xsl:value-of select="$count"/>
                 </xsl:with-param>
+                <xsl:with-param name="template-variant">
+                    <xsl:value-of select="$template-variant"/>
+                </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
 
+    <!-- Text with lines for graphs -->
     <xsl:template name="draw-products-by-manufacturer-lines-and-vtext">
         <xsl:param name="i" />
         <text x="0" y="{318 - $i * 68}" style="font-family: sans-serif; font-size: 0.9em;">
@@ -131,5 +145,6 @@
         </text>
         <line fill="none" stroke-width="2" x1="20" y1="{318 - $i * 70}" x2="500" y2="{318 - $i * 70}" stroke="#000" stroke-dasharray="2 6"/>
     </xsl:template>
+    <!-- Additional lines with text for graphs go here -->
 
 </xsl:stylesheet>
