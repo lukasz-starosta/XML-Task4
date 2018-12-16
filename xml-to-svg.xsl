@@ -148,7 +148,7 @@
 
                 <g id="pie-chart-manufacturer-contribution">
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
-                        <xsl:text>Product by manufacturer contribution to total</xsl:text>
+                        <xsl:text>Product by manufacturer contribution to total (hover over legend circles)</xsl:text>
                     </text>
                     <xsl:call-template name="draw-donut-chart-manufacturer">
                         <xsl:with-param name="i">1</xsl:with-param>
@@ -165,7 +165,7 @@
                 </g>
                 <g id="pie-chart-category-contribution">
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
-                        <xsl:text>Product by category contribution to total</xsl:text>
+                        <xsl:text>Product by category contribution to total (hover over legend circles)</xsl:text>
                     </text>
                     <xsl:call-template name="draw-donut-chart-category">
                         <xsl:with-param name="i">1</xsl:with-param>
@@ -245,7 +245,7 @@
 
                     <!-- Graph title -->
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
-                        <xsl:text>Products and their prices compared to the average price</xsl:text>
+                        <xsl:text>Products and their prices compared to the average price (PLN)</xsl:text>
                     </text>
 
                     <!-- Using the base widened axes -->
@@ -356,13 +356,23 @@
             <!-- Offset + 25 ensures circle starts from the top (0*) - not from the right (90*) -->
 
             <svg viewBox="0 0 42 42" width="350" height="350">
-                <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}"></circle>
+                <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}">
+                    <animateTransform attributeName="transform" begin="0s" dur="60s" type="rotate" from="0 21 21" to="360 21 21" repeatCount="indefinite" />
+                </circle>
             </svg>
 
             <!-- Legend -->
-            <circle fill="none" stroke="{$color}" stroke-width="10" cx="400" cy="{40 * $i}" r="5"/>
+            <circle id="{/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name}" fill="{$color}" stroke="black" stroke-width="0.1" cx="400" cy="{40 * $i}" r="10"/>
             <text x="420" y="{ 5 + 40 * $i }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold;">
                 <xsl:value-of select="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name"/>
+            </text>
+            <rect x="500" y="{ -20 + 40 * $i }" height="40" width="100" fill="#ececec" fill-opacity="0.7" visibility="hidden">
+                <set attributeName="visibility" from="hidden" to="visible" begin="{/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name}.mouseover" end="{/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name}.mouseout"/>
+            </rect>
+            <text visibility="hidden" x="515" y="{5 + 40 * $i }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold;">
+                <xsl:text>Products: </xsl:text>
+                <xsl:value-of select="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]"/>
+                <set attributeName="visibility" from="hidden" to="visible" begin="{/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name}.mouseover" end="{/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name}.mouseout"/>
             </text>
             <!-- Loop, increase offset -->
             <xsl:call-template name="draw-donut-chart-manufacturer">
@@ -429,11 +439,21 @@
             <!-- Stroke-dasharray first attribute - length of the color, second attribute - lenght of the space between them -->
             <!-- Radius - 100 / 2pi -->
             <svg viewBox="0 0 42 42" width="350" height="350">
-                <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}"/>
+                <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}">
+                    <animateTransform attributeName="transform" begin="0s" dur="60s" type="rotate" from="0 21 21" to="360 21 21" repeatCount="indefinite" />
+                </circle>
             </svg>
-            <circle fill="none" stroke="{$color}" stroke-width="10" cx="400" cy="{40 * $i}" r="5"/>
+            <circle id="{/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name}" fill="{$color}" stroke="black" stroke-width="0.1" cx="400" cy="{40 * $i}" r="10"/>
             <text x="420" y="{ 5 + 40 * $i }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold;">
                 <xsl:value-of select="/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name"/>
+            </text>
+            <rect x="500" y="{ -20 + 40 * $i }" height="40" width="100" fill="#ececec" fill-opacity="0.7" visibility="hidden">
+                <set attributeName="visibility" from="hidden" to="visible" begin="{/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name}.mouseover" end="{/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name}.mouseout"/>
+            </rect>
+            <text visibility="hidden" x="515" y="{5 + 40 * $i }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold;">
+                <xsl:text>Products: </xsl:text>
+                <xsl:value-of select="/electronics-shop/summary/number-of-products-by-category/*[position() = $i]"/>
+                <set attributeName="visibility" from="hidden" to="visible" begin="{/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name}.mouseover" end="{/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name}.mouseout"/>
             </text>
             <!-- Loop, increase offset -->
             <xsl:call-template name="draw-donut-chart-category">
