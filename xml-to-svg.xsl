@@ -9,13 +9,10 @@
 
             <use href="#rect-graph-product-by-manufacturer" x="2vw" y="5vh"/>
             <use href="#rect-graph-product-by-category" x="52vw" y="5vh"/>
-            <use href="#pie-chart-manufacturer-contribution" />
+            <use href="#pie-chart-manufacturer-contribution" x="2vw" y="52vh" />
             <use href="#pie-chart-category-contribution" />
             <use href="#rect-graph-product-ratings" x="2vw" y="95vh"/>
             <use href="#rect-graph-product-prices" x="2vw" y="155vh" />
-
-            <!-- Variables -->
-            <xsl:variable name="price" select="."/>
 
             <defs>
 
@@ -57,7 +54,7 @@
                     <line fill="none" stroke-width="2" x1="0" y1="820" x2="1600" y2="820" stroke="#000" />
                 </g>
                 <g id="pie-chart-base">
-                    <ellipse fill="none" stroke="#000" stroke-width="2" cx="125" cy="125" rx="125" ry="125" />
+                    <circle fill="none" stroke="#000" stroke-width="2" cx="125" cy="125" rx="125" ry="125" />
                 </g>
 
                 <!-- Charts -->
@@ -153,7 +150,23 @@
                 </g>
 
                 <g id="pie-chart-manufacturer-contribution">
-                    <use href="#pie-chart-base" x="2vw" y="52vh" />
+                    <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
+                        <xsl:text>Product by manufacturer contribution to total</xsl:text>
+                    </text>
+                    <svg viewBox="0 0 42 42" width="350" height="350">
+                        <xsl:call-template name="draw-donut-chart">
+                            <xsl:with-param name="i">1</xsl:with-param>
+                            <xsl:with-param name="count">
+                                <xsl:value-of select="count(/electronics-shop/summary/number-of-products-by-manufacturer/*)"/>
+                            </xsl:with-param>
+                            <xsl:with-param name="offset">
+                                <xsl:value-of select="0"/>
+                            </xsl:with-param>
+                            <xsl:with-param name="length">
+                                <xsl:value-of select="0"/>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </svg>
                 </g>
                 <g id="pie-chart-category-contribution">
                     <use href="#pie-chart-base" x="52vw" y="52vh" />
@@ -284,13 +297,79 @@
         </svg>
     </xsl:template>
 
+    <!-- For loop drawing donut charts -->
+    <xsl:template name="draw-donut-chart">
+        <xsl:param name="i" />
+        <xsl:param name="count" />
+        <xsl:param name="offset" />
+        <xsl:param name="length" />
+
+        <!-- The actual looping -->
+        <xsl:if test="$i &lt;= $count">
+            <xsl:variable name="this-length">
+                <xsl:value-of select="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i] div 22 * 100"/>
+            </xsl:variable>
+            <xsl:variable name="this-offset">
+                <xsl:value-of select="100 - $length"/>
+            </xsl:variable>
+
+            <!-- Settings colors -->
+            <xsl:variable name="color">
+                <xsl:choose>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'Acer'">
+                        <xsl:value-of select="'#baffa5'"/>
+                    </xsl:when>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'Apple'">
+                        <xsl:value-of select="'#f6ffa4'"/>
+                    </xsl:when>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'Asus'">
+                        <xsl:value-of select="'#84b3ff'"/>
+                    </xsl:when>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'Dell'">
+                        <xsl:value-of select="'#dbdbdb'"/>
+                    </xsl:when>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'OnePlus'">
+                        <xsl:value-of select="'#727272'"/>
+                    </xsl:when>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'Razer'">
+                        <xsl:value-of select="'#b77cff'"/>
+                    </xsl:when>
+                    <xsl:when test="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name = 'Samsung'">
+                        <xsl:value-of select="'#ff5990'"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:variable>
+
+            <!-- Draw a circle with specified attributes -->
+            <!-- Stroke-dasharray first attribute - length of the color, second attribute - lenght of the space between them -->
+            <!-- Radius - 100 / 2pi -->
+            <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{$this-offset}"/>
+
+            <!-- Loop, increase offset -->
+            <xsl:call-template name="draw-donut-chart">
+                <xsl:with-param name="i">
+                    <xsl:value-of select="$i + 1"/>
+                </xsl:with-param>
+                <xsl:with-param name="count">
+                    <xsl:value-of select="count(/electronics-shop/summary/number-of-products-by-manufacturer/*)"/>
+                </xsl:with-param>
+                <xsl:with-param name="offset">
+                    <xsl:value-of select="$offset + $this-offset"/>
+                </xsl:with-param>
+                <xsl:with-param name="length">
+                    <xsl:value-of select="$length + $this-length"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
     <!-- For loop drawing graph lines-->
     <xsl:template name="draw-lines-and-text">
         <xsl:param name="i" />
         <xsl:param name="count" />
         <xsl:param name="template-variant" />
 
-        <!-- If i < count> -->
+        <!-- If i <= count -->
         <xsl:if test="$i &lt;= $count">
             <xsl:choose>
                 <xsl:when test="$template-variant = name(/electronics-shop/summary/number-of-products-by-manufacturer)">
