@@ -7,12 +7,12 @@
     <xsl:template match="/">
         <svg xmlns="http://www.w3.org/2000/svg" width="100vw" height="250vh">
 
-            <use href="#rect-graph-product-by-manufacturer" x="2vw" y="5vh"/>
-            <use href="#rect-graph-product-by-category" x="52vw" y="5vh"/>
-            <use href="#pie-chart-manufacturer-contribution" x="2vw" y="52vh" />
-            <use href="#pie-chart-category-contribution" x="52vw" y="52vh"/>
-            <use href="#rect-graph-product-ratings" x="2vw" y="95vh"/>
-            <use href="#rect-graph-product-prices" x="2vw" y="155vh" />
+            <use href="#rect-graph-product-by-manufacturer" x="10vw" y="5vh"/>
+            <use href="#rect-graph-product-by-category" x="60vw" y="5vh"/>
+            <use href="#pie-chart-manufacturer-contribution" x="10vw" y="55vh" />
+            <use href="#pie-chart-category-contribution" x="60vw" y="55vh"/>
+            <use href="#rect-graph-product-ratings" x="5vw" y="100vh"/>
+            <use href="#rect-graph-product-prices" x="5vw" y="155vh" />
 
             <defs>
 
@@ -150,39 +150,35 @@
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
                         <xsl:text>Product by manufacturer contribution to total</xsl:text>
                     </text>
-                    <svg viewBox="0 0 42 42" width="350" height="350">
-                        <xsl:call-template name="draw-donut-chart-manufacturer">
-                            <xsl:with-param name="i">1</xsl:with-param>
-                            <xsl:with-param name="count">
-                                <xsl:value-of select="count(/electronics-shop/summary/number-of-products-by-manufacturer/*)"/>
-                            </xsl:with-param>
-                            <xsl:with-param name="offset">
-                                <xsl:value-of select="0"/>
-                            </xsl:with-param>
-                            <xsl:with-param name="length">
-                                <xsl:value-of select="0"/>
-                            </xsl:with-param>
-                        </xsl:call-template>
-                    </svg>
+                    <xsl:call-template name="draw-donut-chart-manufacturer">
+                        <xsl:with-param name="i">1</xsl:with-param>
+                        <xsl:with-param name="count">
+                            <xsl:value-of select="count(/electronics-shop/summary/number-of-products-by-manufacturer/*)"/>
+                        </xsl:with-param>
+                        <xsl:with-param name="offset">
+                            <xsl:value-of select="0"/>
+                        </xsl:with-param>
+                        <xsl:with-param name="length">
+                            <xsl:value-of select="0"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </g>
                 <g id="pie-chart-category-contribution">
                     <text x="20" y="-10" style="font-weight: bold; font-family: sans-serif; font-size: 0.9em;">
                         <xsl:text>Product by category contribution to total</xsl:text>
                     </text>
-                    <svg viewBox="0 0 42 42" width="350" height="350">
-                        <xsl:call-template name="draw-donut-chart-category">
-                            <xsl:with-param name="i">1</xsl:with-param>
-                            <xsl:with-param name="count">
-                                <xsl:value-of select="count(/electronics-shop/summary/number-of-products-by-category/*)"/>
-                            </xsl:with-param>
-                            <xsl:with-param name="offset">
-                                <xsl:value-of select="0"/>
-                            </xsl:with-param>
-                            <xsl:with-param name="length">
-                                <xsl:value-of select="0"/>
-                            </xsl:with-param>
-                        </xsl:call-template>
-                    </svg>
+                    <xsl:call-template name="draw-donut-chart-category">
+                        <xsl:with-param name="i">1</xsl:with-param>
+                        <xsl:with-param name="count">
+                            <xsl:value-of select="count(/electronics-shop/summary/number-of-products-by-category/*)"/>
+                        </xsl:with-param>
+                        <xsl:with-param name="offset">
+                            <xsl:value-of select="0"/>
+                        </xsl:with-param>
+                        <xsl:with-param name="length">
+                            <xsl:value-of select="0"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </g>
 
                 <g id="rect-graph-product-ratings">
@@ -358,8 +354,16 @@
             <!-- Stroke-dasharray first attribute - length of the color, second attribute - lenght of the space between them -->
             <!-- Radius - 100 / 2pi -->
             <!-- Offset + 25 ensures circle starts from the top (0*) - not from the right (90*) -->
-            <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}"/>
 
+            <svg viewBox="0 0 42 42" width="350" height="350">
+                <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}"></circle>
+            </svg>
+
+            <!-- Legend -->
+            <circle fill="none" stroke="{$color}" stroke-width="10" cx="400" cy="{40 * $i}" r="5"/>
+            <text x="420" y="{ 5 + 40 * $i }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold;">
+                <xsl:value-of select="/electronics-shop/summary/number-of-products-by-manufacturer/*[position() = $i]/@manufacturer-name"/>
+            </text>
             <!-- Loop, increase offset -->
             <xsl:call-template name="draw-donut-chart-manufacturer">
                 <xsl:with-param name="i">
@@ -424,8 +428,13 @@
             <!-- Draw a circle with specified attributes -->
             <!-- Stroke-dasharray first attribute - length of the color, second attribute - lenght of the space between them -->
             <!-- Radius - 100 / 2pi -->
-            <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}"/>
-
+            <svg viewBox="0 0 42 42" width="350" height="350">
+                <circle fill="none" stroke="{$color}" stroke-width="8" cx="21" cy="21" r="15.91549430918954" stroke-dasharray="{$this-length} {100 - $this-length}" stroke-dashoffset="{25 + $this-offset}"/>
+            </svg>
+            <circle fill="none" stroke="{$color}" stroke-width="10" cx="400" cy="{40 * $i}" r="5"/>
+            <text x="420" y="{ 5 + 40 * $i }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold;">
+                <xsl:value-of select="/electronics-shop/summary/number-of-products-by-category/*[position() = $i]/@category-name"/>
+            </text>
             <!-- Loop, increase offset -->
             <xsl:call-template name="draw-donut-chart-category">
                 <xsl:with-param name="i">
