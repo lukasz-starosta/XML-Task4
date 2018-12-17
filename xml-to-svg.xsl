@@ -8,34 +8,33 @@
         <svg xmlns="http://www.w3.org/2000/svg" 
             xmlns:xlink="http://www.w3.org/1999/xlink" width="100vw" height="260vh">
 
-            <rect x="38vw" y="2vh" fill="white" height="18vh" width="20vw" stroke="black" stroke-width="1"/>
             <a xlink:href="#rect-graph-product-by-manufacturer">
-                <text x="39vw" y="40" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#008F68" text-decoration="underline">
+                <text x="39vw" y="40" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#9bc1ff" text-decoration="underline">
                     <tspan>Number of products by manufacturer</tspan>
                 </text>
             </a>
             <a xlink:href="#rect-graph-product-by-category">
-                <text x="39vw" y="65" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#008F68" text-decoration="underline">
+                <text x="39vw" y="65" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#9bc1ff" text-decoration="underline">
                     <tspan>Number of products by category</tspan>
                 </text>
             </a>
             <a xlink:href="#pie-chart-manufacturer-contribution">
-                <text x="39vw" y="90" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#008F68" text-decoration="underline">
+                <text x="39vw" y="90" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#9bc1ff" text-decoration="underline">
                     <tspan>Manufacturers' contribution</tspan>
                 </text>
             </a>
             <a xlink:href="#pie-chart-category-contribution">
-                <text x="39vw" y="115" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#008F68" text-decoration="underline">
+                <text x="39vw" y="115" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#9bc1ff" text-decoration="underline">
                     <tspan>Categories' contribution</tspan>
                 </text>
             </a>
             <a xlink:href="#rect-graph-product-ratings">
-                <text x="39vw" y="140" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#008F68" text-decoration="underline">
+                <text x="39vw" y="140" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#9bc1ff" text-decoration="underline">
                     <tspan>Graph of product ratings</tspan>
                 </text>
             </a>
             <a xlink:href="#rect-graph-product-prices">
-                <text x="39vw" y="165" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#008F68" text-decoration="underline">
+                <text x="39vw" y="165" font-family="sans-serif" font-size="1.2em" font-weight="normal" fill="#9bc1ff" text-decoration="underline">
                     <tspan>Graph of product prices</tspan>
                 </text>
             </a>
