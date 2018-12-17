@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<?xml-stylesheet type="text/xsl" href="xml-to-svg.xsl"?>
+<?xml-stylesheet type="text/xsl" href="xml-to-text.xsl"?>
+<!-- <?xml-stylesheet type="text/xsl" href="xml-to-svg.xsl"?> -->
 <electronics-shop>
     <products-list>
         <product product-id="i50" category="Notebook" manufacturer="Acer">
