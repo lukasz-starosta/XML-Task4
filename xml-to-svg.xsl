@@ -282,29 +282,6 @@
                 <!-- Using the base widened axes -->
                 <use href="#rect-graph-base-wide-high" x="20" y="30"/>
 
-                <!-- Create horizontal bars and text  -->
-                <xsl:for-each select="//product">
-
-                    <!-- Bars -->
-                    <rect x="{70 * position()}" y="30" width="30" height="818" style="fill:url(#rect-bar-price)"/>
-                    <rect x="{70 * position()}" y="{848 - ./price div 10 }" width="30" height="5" fill="#727272"/>
-
-                    <!-- X axis text -->
-                    <xsl:choose>
-                        <xsl:when test="position() mod 2 = 0">
-                            <text x="{20 + 70 * position()}" y="888" style="text-anchor: middle; font-family: sans-serif; font-size: 0.65em;">
-                                <xsl:value-of select="./name" />
-                            </text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <text x="{20 + 70 * position()}" y="868" style="text-anchor: middle; font-family: sans-serif; font-size: 0.65em;">
-                                <xsl:value-of select="./name" />
-                            </text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-
-                </xsl:for-each>
-
                 <!-- Variable for the max price -->
                 <xsl:variable name="max">
                     <xsl:for-each select="//product/price">
@@ -325,7 +302,57 @@
                         <xsl:value-of select="name(//average-product-price)"/>
                     </xsl:with-param>
                 </xsl:call-template>
+                <!-- Create horizontal bars and text  -->
+                <xsl:for-each select="//product">
 
+                    <!-- Bars -->
+                    <rect x="{70 * position()}" y="30" width="30" height="818" style="fill:url(#rect-bar-price)"/>
+                    <rect id="{position()}" x="{70 * position()}" y="{848 - ./price div 10 }" width="30" height="5" fill="#727272" cursor="pointer"/>
+
+                    <!-- X axis text -->
+                    <xsl:choose>
+                        <xsl:when test="position() mod 2 = 0">
+                            <text x="{20 + 70 * position()}" y="888" style="text-anchor: middle; font-family: sans-serif; font-size: 0.65em;">
+                                <xsl:value-of select="./name" />
+                            </text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <text x="{20 + 70 * position()}" y="868" style="text-anchor: middle; font-family: sans-serif; font-size: 0.65em;">
+                                <xsl:value-of select="./name" />
+                            </text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+
+                    <!-- Display details on click -->
+                    <script type="text/ecmascript"><![CDATA[
+                        window.onload = () => {
+                            for (let i = 1; i <= 22; i++) {
+                                const element = document.getElementById(i);
+                                element.onclick = function () {
+                                    const tooltip = document.getElementById(`price-tooltip-${element.id}`);
+                                    const text = document.getElementById(`price-text-${element.id}`);
+
+                                    if (tooltip.getAttribute('transform') === 'scale(0)') {
+                                        tooltip.setAttribute('transform', 'scale(1)');
+                                        text.setAttribute('transform', 'scale(1)');
+                                    } else {
+                                        tooltip.setAttribute('transform', 'scale(0)');
+                                        text.setAttribute('transform', 'scale(0)');
+                                    }
+                                }
+                            }
+                        }
+                        
+                        ]]>
+                    </script>
+
+                    <rect id="price-tooltip-{position()}" x="{-20 + 70 * position()}" y="{858 - ./price div 10 }" height="40" width="100" fill="#f0f0f0" transform="scale(0)" style="transition: transform .5s ease-in-out;" />
+                    <text id="price-text-{position()}" transform="scale(0)" x="{-20 + 70 * position()}" y="{883 - ./price div 10 }" style="font-family: sans-serif; font-size: 0.8em; font-weight: bold; transition: transform .5s ease-in-out;">
+                        <tspan>Price: </tspan>
+                        <xsl:value-of select="./price"/>
+                        <xsl:value-of select="./price/@currency"/>
+                    </text>
+                </xsl:for-each>
                 <!-- Avg price -->
                 <text x="1520" y="{ 840 - //average-product-price div 10 }" style="font-family: sans-serif; font-size: 0.9em; font-weight: bolder;">
                     <xsl:text>avg = </xsl:text>
